@@ -2,36 +2,39 @@ import {
   NearDatasourceKind,
   NearHandlerKind,
   NearProject,
-} from "@subql/types-near";
+} from '@subql/types-near'
 
-import * as dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv'
+import path from 'path'
 
-const mode = process.env.NODE_ENV || 'production';
+const mode = process.env.NODE_ENV || 'production'
 
 // Load the appropriate .env file
-const dotenvPath = path.resolve(__dirname, `.env${mode !== 'production' ? `.${mode}` : ''}`);
-dotenv.config({ path: dotenvPath });
+const dotenvPath = path.resolve(
+  __dirname,
+  `.env${mode !== 'production' ? `.${mode}` : ''}`
+)
+dotenv.config({ path: dotenvPath })
 
 const project: NearProject = {
-  specVersion: "1.0.0",
-  name: "near-subql-starter",
-  version: "0.0.1",
+  specVersion: '1.0.0',
+  name: 'near-subql-starter',
+  version: '0.0.1',
   runner: {
     node: {
-      name: "@subql/node-near",
-      version: "*",
+      name: '@subql/node-near',
+      version: '*',
     },
     query: {
-      name: "@subql/query",
-      version: "*",
+      name: '@subql/query',
+      version: '*',
     },
   },
   description:
-    "This is an example project that indexes price oracle feeds from the NEAR blockchain using SubQuery",
-  repository: "https://github.com/subquery/near-subql-starter",
+    'This is an example project that indexes price oracle feeds from the NEAR blockchain using SubQuery',
+  repository: 'https://github.com/subquery/near-subql-starter',
   schema: {
-    file: "./schema.graphql",
+    file: './schema.graphql',
   },
   network: {
     // chainId is the EVM Chain ID, for Near Aurora this is 1313161554
@@ -46,52 +49,31 @@ const project: NearProject = {
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     endpoint: process.env.ENDPOINT!?.split(',') as string[] | string,
-    bypassBlocks: [81003306], // This is a missing block from the NEAR mainnet chain that we are skipping
+    // This is a missing block from the NEAR mainnet chain that we are skipping
+    bypassBlocks: [81003306],
   },
   dataSources: [
     {
-      kind: NearDatasourceKind.Runtime, // We use ethereum runtime since NEAR Aurora is a layer-2 that is compatible
-      startBlock: 80980000, // You can set any start block you want here. This block was when the sweat_welcome.near address was created
+      kind: NearDatasourceKind.Runtime,
+      startBlock: 125226210,
       mapping: {
-        file: "./dist/index.js",
+        file: './dist/index.js',
         handlers: [
           {
-            handler: "handleTransaction",
-            kind: NearHandlerKind.Transaction, // We use ethereum runtime since NEAR Aurora is a layer-2 that is compatible
-            filter: {
-              sender: "sweat_welcome.near",
-              receiver: "token.sweat",
-            },
+            handler: 'handleBlock',
+            kind: NearHandlerKind.Block,
           },
           {
-            handler: "handleAction",
+            handler: 'handleAction',
             kind: NearHandlerKind.Action,
             filter: {
-              type: "FunctionCall",
-              methodName: "storage_deposit",
-              receiver: "token.sweat",
-              /*
-              Filter examples 
-           filter:
-              type: DeleteAccount
-              beneficiaryId: ""
-           filter:
-              type: AddKey
-              publicKey: ""
-              accessKey: ""
-           filter:
-              type: DeleteKey
-              publicKey: ""
-           filter:
-              type: Stake
-              publicKey: ""
-               */
+              type: 'DeployContract',
             },
           },
         ],
       },
     },
   ],
-};
+}
 
-export default project;
+export default project
