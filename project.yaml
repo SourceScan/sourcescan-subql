@@ -35,6 +35,7 @@ network:
     - https://near.nownodes.io/
     - https://endpoints.omniatech.io/v1/near/mainnet/public
     - https://api.seracle.com/saas/baas/rpc/near/mainnet/public/
+    - https://near-mainnet.gateway.tatum.io
   bypassBlocks:
     - 81003306
 dataSources:
