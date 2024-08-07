@@ -1,21 +1,23 @@
 import { NearAction } from '@subql/types-near'
 import { NearActionEntity } from '../types/models'
 
-export async function handleAction(action: NearAction): Promise<void> {
-  const isTransaction = !!action.transaction
-  const blockHeight = isTransaction
-    ? action.transaction.block_height
-    : action.action.block_height
-  const id = isTransaction
-    ? `${action.transaction.block_height}-${action.transaction.result.id}-${action.id}`
-    : `${action.action.block_height}-${action.action.id}-${action.id}`
-  const sender = isTransaction
-    ? action.transaction.signer_id
-    : action.action.predecessor_id
-  const receiver = isTransaction
-    ? action.transaction.receiver_id
-    : action.action.receiver_id
-  const txHash = isTransaction ? action.transaction.result.id : action.action.id
+export async function handleAction(nearAction: NearAction): Promise<void> {
+  const isTransaction = !!nearAction.transaction
+  const blockHeight = !isTransaction
+    ? nearAction.action.block_height
+    : nearAction.transaction.block_height
+  const id = !isTransaction
+    ? `${nearAction.action.block_height}-${nearAction.action.id}-${nearAction.id}`
+    : `${nearAction.transaction.block_height}-${nearAction.transaction.result.id}-${nearAction.id}`
+  const sender = !isTransaction
+    ? nearAction.action.predecessor_id
+    : nearAction.transaction.signer_id
+  const receiver = !isTransaction
+    ? nearAction.action.receiver_id
+    : nearAction.transaction.receiver_id
+  const txHash = !isTransaction
+    ? nearAction.action.id
+    : nearAction.transaction.result.id
 
   logger.info(`Handling action at ${blockHeight}`)
 
