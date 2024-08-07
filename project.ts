@@ -55,14 +55,10 @@ const project: NearProject = {
   dataSources: [
     {
       kind: NearDatasourceKind.Runtime,
-      startBlock: 125226210,
+      startBlock: parseInt(process.env.START_BLOCK!),
       mapping: {
         file: './dist/index.js',
         handlers: [
-          {
-            handler: 'handleBlock',
-            kind: NearHandlerKind.Block,
-          },
           {
             handler: 'handleAction',
             kind: NearHandlerKind.Action,

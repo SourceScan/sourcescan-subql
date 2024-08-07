@@ -19,16 +19,30 @@ network:
   chainId: mainnet
   endpoint:
     - https://rpc.mainnet.near.org
+    - https://rpc.mainnet.pagoda.co
+    - https://1rpc.io/near
+    - https://near-mainnet-rpc.allthatnode.com:3030
+    - https://rpc.ankr.com/near
+    - https://public-rpc.blockpi.io/http/near
+    - https://near.drpc.org
+    - https://rpc.web4.near.page
+    - https://free.rpc.fastnear.com
+    - https://rpc.near.gateway.fm/
+    - https://getblock.io/nodes/near/
+    - https://near.lava.build
+    - https://near.lavenderfive.com/
+    - https://nodereal.io/api-marketplace/near-rpc
+    - https://near.nownodes.io/
+    - https://endpoints.omniatech.io/v1/near/mainnet/public
+    - https://api.seracle.com/saas/baas/rpc/near/mainnet/public/
   bypassBlocks:
     - 81003306
 dataSources:
   - kind: near/Runtime
-    startBlock: 125226210
+    startBlock: 125236494
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleBlock
-          kind: near/BlockHandler
         - handler: handleAction
           kind: near/ActionHandler
           filter:
