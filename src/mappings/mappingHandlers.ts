@@ -2,22 +2,40 @@ import { NearAction } from '@subql/types-near'
 import { NearActionEntity } from '../types/models'
 
 export async function handleAction(nearAction: NearAction): Promise<void> {
+  // if transaction - normal deploy, receipt - batch transaction
   const isTransaction = !!nearAction.transaction
-  const blockHeight = !isTransaction
-    ? nearAction.action.block_height
-    : nearAction.transaction.block_height
-  const id = !isTransaction
-    ? `${nearAction.action.block_height}-${nearAction.action.id}-${nearAction.id}`
-    : `${nearAction.transaction.block_height}-${nearAction.transaction.result.id}-${nearAction.id}`
-  const sender = !isTransaction
-    ? nearAction.action.predecessor_id
-    : nearAction.transaction.signer_id
-  const receiver = !isTransaction
-    ? nearAction.action.receiver_id
-    : nearAction.transaction.receiver_id
-  const txHash = !isTransaction
-    ? nearAction.action.id
-    : nearAction.transaction.result.id
+  const isReceipt = !!nearAction.receipt
+
+  if (!isTransaction && !isReceipt) {
+    logger.warn(
+      `Action does not have a transaction or receipt: ${JSON.stringify(
+        nearAction
+      )}`
+    )
+    return
+  }
+
+  const blockHeight = isTransaction
+    ? nearAction.transaction.block_height
+    : nearAction.receipt!.block_height
+
+  const id = isTransaction
+    ? `${nearAction.transaction.block_height}-${nearAction.transaction.result.id}-${nearAction.id}`
+    : `${nearAction.receipt!.block_height}-${nearAction.receipt!.receipt_id}-${
+        nearAction.id
+      }`
+
+  const sender = isTransaction
+    ? nearAction.transaction.signer_id
+    : nearAction.receipt!.predecessor_id
+
+  const receiver = isTransaction
+    ? nearAction.transaction.receiver_id
+    : nearAction.receipt!.receiver_id
+
+  const txHash = isTransaction
+    ? nearAction.transaction.result.id
+    : nearAction.receipt!.receipt_id
 
   logger.info(`Handling action at ${blockHeight}`)
 
@@ -26,7 +44,7 @@ export async function handleAction(nearAction: NearAction): Promise<void> {
     sender: sender,
     receiver: receiver,
     txHash: txHash,
-    blockNumber: blockHeight,
+    blockNumber: BigInt(blockHeight),
   })
 
   await actionRecord.save()
