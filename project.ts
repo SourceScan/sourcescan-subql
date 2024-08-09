@@ -48,6 +48,7 @@ const project: NearProject = {
      * If you use a rate limited endpoint, adjust the --batch-size and --workers parameters
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
+    dictionary: 'https://api.subquery.network/sq/subquery/near-dictionary',
     endpoint: process.env.ENDPOINT!?.split(',') as string[] | string,
     // This is a missing block from the NEAR mainnet chain that we are skipping
     bypassBlocks: [81003306],
