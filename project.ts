@@ -3,17 +3,13 @@ import {
   NearHandlerKind,
   NearProject,
 } from '@subql/types-near'
+import { NEAR_RPC_ENDPOINTS } from './rpc.config'
 
 import * as dotenv from 'dotenv'
 import path from 'path'
 
-const mode = process.env.NODE_ENV || 'production'
-
 // Load the appropriate .env file
-const dotenvPath = path.resolve(
-  __dirname,
-  `.env${mode !== 'production' ? `.${mode}` : ''}`
-)
+const dotenvPath = path.resolve(__dirname, `.env`)
 dotenv.config({ path: dotenvPath })
 
 const project: NearProject = {
@@ -49,7 +45,7 @@ const project: NearProject = {
      * These settings can be found in your docker-compose.yaml, they will slow indexing but prevent your project being rate limited
      */
     dictionary: 'https://api.subquery.network/sq/subquery/near-dictionary',
-    endpoint: process.env.ENDPOINT!?.split(',') as string[] | string,
+    endpoint: NEAR_RPC_ENDPOINTS,
     // This is a missing block from the NEAR mainnet chain that we are skipping
     bypassBlocks: [81003306],
   },
