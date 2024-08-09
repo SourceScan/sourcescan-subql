@@ -1,6 +1,6 @@
 # // Auto-generated , DO NOT EDIT
 specVersion: 1.0.0
-name: near-subql-starter
+name: sourcescan-subql
 version: 0.0.1
 runner:
   node:
@@ -9,10 +9,8 @@ runner:
   query:
     name: '@subql/query'
     version: '*'
-description: >-
-  This is an example project that indexes price oracle feeds from the NEAR
-  blockchain using SubQuery
-repository: https://github.com/subquery/near-subql-starter
+description: NEAR indexer for DeployContract actions
+repository: https://github.com/SourceScan/sourcescan-subql
 schema:
   file: ./schema.graphql
 network:
