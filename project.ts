@@ -3,7 +3,7 @@ import {
   NearHandlerKind,
   NearProject,
 } from '@subql/types-near'
-import { NEAR_RPC_ENDPOINTS } from './rpc.config'
+import { PUBLIC_NEAR_RPC_ENDPOINTS } from './config'
 
 import * as dotenv from 'dotenv'
 import path from 'path'
@@ -34,7 +34,9 @@ const project: NearProject = {
   network: {
     chainId: process.env.CHAIN_ID!,
     dictionary: 'https://api.subquery.network/sq/subquery/near-dictionary',
-    endpoint: NEAR_RPC_ENDPOINTS,
+    endpoint: PUBLIC_NEAR_RPC_ENDPOINTS.concat(
+      JSON.parse(process.env.PRIVATE_ENDPOINTS!)
+    ),
     bypassBlocks: [81003306],
   },
   dataSources: [
