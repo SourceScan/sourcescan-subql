@@ -1,7 +1,7 @@
 {
   "name": "sourcescan-subql",
   "version": "0.0.1",
-  "description": "This project can be use as a starting point for developing your new NEAR SubQuery project",
+  "description": "NEAR indexer for DeployContract actions",
   "main": "dist/index.js",
   "scripts": {
     "build": "subql codegen && subql build",
@@ -12,7 +12,7 @@
     "test": "jest",
     "build:develop": "NODE_ENV=develop subql codegen && NODE_ENV=develop subql build"
   },
-  "homepage": "https://github.com/subquery/near-subql-starter",
+  "homepage": "https://github.com/SourceScan/sourcescan-subql",
   "repository": "github:subquery/near-subql-starter",
   "files": [
     "dist",
